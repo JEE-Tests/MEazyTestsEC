@@ -35,24 +35,6 @@
       display: none; 
     }
 
-    #submitScoreBtn {
-      display: none;
-      background-color: #28a745;
-      color: white;
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    #submitScoreBtn:hover { background-color: #218838; }
-
     #themeToggle {
       position: fixed; 
       bottom: 15px; 
@@ -86,13 +68,12 @@
 
   <!-- Floating UI Elements -->
   <button id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button>
-  <button id="submitScoreBtn" onclick="openGoogleForm()">Step 2: Submit Your Score</button>
   <div id="selfTestNotice">If you really want to test yourself, just avoid clicking the solution tab before the test ends.</div>
 
   <!-- Main Menu -->
   <div class="menu" id="testMenu">
     <h2>Select Your Scheduled Test</h2>
-    <p>Instruction: When you finish the test, take a screenshot of your marks and click the green <strong>"Step 2: Submit Your Score"</strong> button at the bottom right.</p>
+    <p>Instruction: When you finish the test, open Telegram and submit your marks to the <strong>Bot</strong> to update your live ranking.</p>
     
     <button class="test-btn" onclick="loadTest('https://bijzlitestseries.netlify.app/electronics%20engineering/made%20easy/gate_2026_+_gate_2025_online_test_series_electronics_engineering/068_topicwise%20test-17%20part%20syllabus%20gate%202026%20ec%20digital%20circuits-1')">Digital Electronics Test 01</button>
     <button class="test-btn" onclick="loadTest('https://bijzlitestseries.netlify.app/electronics%20engineering/made%20easy/gate_2026_+_gate_2025_online_test_series_electronics_engineering/051_topicwise%20test%20-1%20part%20syllabus%20gate%202026%20ec%20network%201')">Network Theory Test 01</button>
@@ -124,9 +105,9 @@
       if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) e.preventDefault();
     });
 
-    // --- 3. LOGIC: Routing & Opening Form in New Tab ---
+    // --- 3. LOGIC: Routing ---
     function loadTest(url) {
-      alert("Warning: Please close all background apps. When finished, you MUST click 'Submit Your Score' to record your marks. Click OK to enter full-screen mode and begin.");
+      alert("Warning: Please close all background apps. When finished, remember to submit your marks to the Telegram bot. Click OK to enter full-screen mode and begin.");
       
       let elem = document.documentElement;
       if (elem.requestFullscreen) elem.requestFullscreen();
@@ -139,12 +120,8 @@
       const frame = document.getElementById('testFrame');
       frame.src = url;
       frame.style.display = 'block';
-      document.getElementById('submitScoreBtn').style.display = 'block';
     }
 
-    function openGoogleForm() {
-      window.open('https://forms.gle/F4sDntpxmAD5CZrk8', '_blank', 'noopener,noreferrer');
-    }
   </script>
 
 </body>
