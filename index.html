@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheduled Tests</title>
+  <style>
+    /* Base Styles (Light Mode) */
+    body, html { font-family: sans-serif; text-align: center; margin: 0; padding: 0; background-color: #f8f9fa; color: #121212; height: 100%; transition: background-color 0.3s, color 0.3s; }
+    
+    /* Dark Mode Styles */
+    body.dark-mode { background-color: #121212; color: #ffffff; }
+    body.dark-mode #testMenu h2, body.dark-mode #testMenu p { color: #ffffff; }
+    body.dark-mode #themeToggle { background-color: #f8f9fa; color: #121212; }
+    body.dark-mode #selfTestNotice { background-color: rgba(255, 255, 255, 0.15); color: #ffffff; }
+
+    .menu { padding-top: 100px; }
+    
+    button.test-btn { 
+      padding: 15px 30px; 
+      margin: 10px; 
+      font-size: 16px; 
+      cursor: pointer; 
+      background-color: #0056b3; 
+      color: white; 
+      border: none; 
+      border-radius: 5px;
+    }
+    button.test-btn:hover { background-color: #004494; }
+    
+    iframe { 
+      width: 100%; 
+      height: 100vh;
+      border: none; 
+      display: none; 
+    }
+
+    #submitScoreBtn {
+      display: none;
+      background-color: #28a745;
+      color: white;
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    #submitScoreBtn:hover { background-color: #218838; }
+
+    #themeToggle {
+      position: fixed; 
+      bottom: 15px; 
+      right: 15px; 
+      padding: 10px 15px;
+      cursor: pointer; 
+      background-color: #333; 
+      color: white;
+      border: none; 
+      border-radius: 5px; 
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    #selfTestNotice {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      padding: 10px 15px;
+      background-color: rgba(0, 0, 0, 0.75);
+      color: white;
+      font-size: 14px;
+      border-radius: 5px;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating UI Elements -->
+  <button id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+  <button id="submitScoreBtn" onclick="openGoogleForm()">Step 2: Submit Your Score</button>
+  <div id="selfTestNotice">If you really want to test yourself, just avoid clicking the solution tab before the test ends.</div>
+
+  <!-- Main Menu -->
+  <div class="menu" id="testMenu">
+    <h2>Select Your Scheduled Test</h2>
+    <p>Instruction: When you finish the test, take a screenshot of your marks and click the green <strong>"Step 2: Submit Your Score"</strong> button at the bottom right.</p>
+    
+    <button class="test-btn" onclick="loadTest('https://bijzlitestseries.netlify.app/electronics%20engineering/made%20easy/gate_2026_+_gate_2025_online_test_series_electronics_engineering/068_topicwise%20test-17%20part%20syllabus%20gate%202026%20ec%20digital%20circuits-1')">Digital Electronics Test 01</button>
+    <button class="test-btn" onclick="loadTest('https://bijzlitestseries.netlify.app/electronics%20engineering/made%20easy/gate_2026_+_gate_2025_online_test_series_electronics_engineering/051_topicwise%20test%20-1%20part%20syllabus%20gate%202026%20ec%20network%201')">Network Theory Test 01</button>
+  </div>
+
+  <!-- Iframes for Content -->
+  <iframe id="testFrame" src=""></iframe>
+
+  <script>
+    // --- 1. THEME TOGGLE LOGIC ---
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      document.getElementById('themeToggle').innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('themeToggle').innerText = '☀️ Light Mode';
+    }
+
+    // --- 2. SECURITY: Block Right-Click & Dev Tools ---
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.key === 'F12' || e.keyCode === 123) e.preventDefault();
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) e.preventDefault();
+      if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) e.preventDefault();
+      if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) e.preventDefault();
+    });
+
+    // --- 3. LOGIC: Routing & Opening Form in New Tab ---
+    function loadTest(url) {
+      alert("Warning: Please close all background apps. When finished, you MUST click 'Submit Your Score' to record your marks. Click OK to enter full-screen mode and begin.");
+      
+      let elem = document.documentElement;
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+
+      document.getElementById('testMenu').style.display = 'none';
+      document.getElementById('themeToggle').style.display = 'none'; 
+      
+      const frame = document.getElementById('testFrame');
+      frame.src = url;
+      frame.style.display = 'block';
+      document.getElementById('submitScoreBtn').style.display = 'block';
+    }
+
+    function openGoogleForm() {
+      window.open('https://forms.gle/F4sDntpxmAD5CZrk8', '_blank', 'noopener,noreferrer');
+    }
+  </script>
+
+</body>
+</html>
